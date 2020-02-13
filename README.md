@@ -1,10 +1,10 @@
 # Functional programming
 
-##Intro##
+## Intro
 
 This class provides various members and tools for functional programming. It will help you to work with arrays in a very simple way.
 
-##Modes##
+## Modes
 
 Here we can fetch specified field from all objects of array:
 
