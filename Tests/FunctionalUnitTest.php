@@ -271,7 +271,7 @@ class FunctionalUnitTest extends \PHPUnit\Framework\TestCase
                 '!=',
                 1,
                 1
-            ],
+            ]
         ];
     }
 
@@ -283,10 +283,7 @@ class FunctionalUnitTest extends \PHPUnit\Framework\TestCase
     public function testFilter(array $data, string $operation, int $value, int $result): void
     {
         // setup, test body and assertions
-        $this->assertEquals(
-            $result,
-            count(\Mezon\Functional\Functional::filter($data, 'foo', $operation, $value)),
-            'Invalid filtration');
+        $this->assertEquals($result, count(\Mezon\Functional\Functional::filter($data, 'foo', $operation, $value)), 'Invalid filtration');
     }
 
     /**
@@ -604,7 +601,7 @@ class FunctionalUnitTest extends \PHPUnit\Framework\TestCase
     /**
      * Method checks does the field exists
      */
-    function testFieldExistsPlain(): void
+    function testFieldExists(): void
     {
         // setup
         $arr = [
@@ -641,5 +638,29 @@ class FunctionalUnitTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue(\Mezon\Functional\Functional::fieldExists($arr, 'f2'));
         $this->assertTrue(\Mezon\Functional\Functional::fieldExists($arr, 'f22'));
         $this->assertFalse(\Mezon\Functional\Functional::fieldExists($arr, 'f22', false));
+    }
+
+    /**
+     * Method checks does the field exists
+     */
+    function testFieldExistsPlain(): void
+    {
+        // setup
+        $arr = [
+            'f1' => 1,
+            'f2' => 2,
+            'rec' => [
+                'f4' => 4
+            ]
+        ];
+        $arr2 = new stdClass();
+        $arr2->f3 = 3;
+
+        // test body and assertions
+        $this->assertTrue(\Mezon\Functional\Functional::fieldExistsPlain($arr, 'f1'));
+        $this->assertTrue(\Mezon\Functional\Functional::fieldExistsPlain($arr, 'f2'));
+        $this->assertFalse(\Mezon\Functional\Functional::fieldExistsPlain($arr, 'f3'));
+        $this->assertTrue(\Mezon\Functional\Functional::fieldExistsPlain($arr2, 'f3'));
+        $this->assertFalse(\Mezon\Functional\Functional::fieldExistsPlain($arr2, 'f4'));
     }
 }
