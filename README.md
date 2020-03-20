@@ -74,7 +74,9 @@ $Data = array( $obj1 , array( $obj2 , $obj3 ) );
 $this->assertEquals( Functional::sumFields( $Data , 'foo' ) , 6 , 'Invalid sum' );
 ```
 
-We can also transform objects in arrays like this:
+## Transformations
+
+We can also transform objects in arrays like this (the most basic and simple way):
 
 ```PHP
 /**
@@ -102,3 +104,17 @@ Functional::transform( $Data , 'transform2x' );
 // with 2, 4 and 6 values in their 'foo' fields
 var_dump( $Data );
 ```
+
+But if you need more complex transformations, you can use class Transform.
+
+```PHP
+$data = [
+	1 , 2
+];
+
+Transform::convert($data,function($item){return [10*$item, 100*$item]});
+
+var_dump($data);
+
+// will output
+// [10=>100 , 20=>200]
