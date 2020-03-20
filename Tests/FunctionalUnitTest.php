@@ -283,7 +283,10 @@ class FunctionalUnitTest extends \PHPUnit\Framework\TestCase
     public function testFilter(array $data, string $operation, int $value, int $result): void
     {
         // setup, test body and assertions
-        $this->assertEquals($result, count(\Mezon\Functional\Functional::filter($data, 'foo', $operation, $value)), 'Invalid filtration');
+        $this->assertEquals(
+            $result,
+            count(\Mezon\Functional\Functional::filter($data, 'foo', $operation, $value)),
+            'Invalid filtration');
     }
 
     /**
@@ -509,7 +512,7 @@ class FunctionalUnitTest extends \PHPUnit\Framework\TestCase
     /**
      * Testing records sorting
      */
-    function testRecordsSorting(): void
+    public function testRecordsSorting(): void
     {
         // setup
         $arr = [
@@ -536,7 +539,7 @@ class FunctionalUnitTest extends \PHPUnit\Framework\TestCase
     /**
      * Testing records sorting
      */
-    function testRecordsSortingReverse(): void
+    public function testRecordsSortingReverse(): void
     {
         // setup
         $arr = [
@@ -567,7 +570,7 @@ class FunctionalUnitTest extends \PHPUnit\Framework\TestCase
     /**
      * Method tests nested record's addition
      */
-    function testSetChild(): void
+    public function testSetChild(): void
     {
         // setup
         $objects = [
@@ -601,7 +604,7 @@ class FunctionalUnitTest extends \PHPUnit\Framework\TestCase
     /**
      * Method checks does the field exists
      */
-    function testFieldExists(): void
+    public function testFieldExists(): void
     {
         // setup
         $arr = [
@@ -622,7 +625,7 @@ class FunctionalUnitTest extends \PHPUnit\Framework\TestCase
     /**
      * Method checks does the field recursive.
      */
-    function testFieldExistsRecursive(): void
+    public function testFieldExistsRecursive(): void
     {
         // setup
         $arr = [
@@ -643,7 +646,7 @@ class FunctionalUnitTest extends \PHPUnit\Framework\TestCase
     /**
      * Method checks does the field exists
      */
-    function testFieldExistsPlain(): void
+    public function testFieldExistsPlain(): void
     {
         // setup
         $arr = [
@@ -662,5 +665,25 @@ class FunctionalUnitTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse(\Mezon\Functional\Functional::fieldExistsPlain($arr, 'f3'));
         $this->assertTrue(\Mezon\Functional\Functional::fieldExistsPlain($arr2, 'f3'));
         $this->assertFalse(\Mezon\Functional\Functional::fieldExistsPlain($arr2, 'f4'));
+    }
+
+    /**
+     * Testing getFieldPlain
+     */
+    public function testGetFieldPlain(): void
+    {
+        // setup
+        $data = [
+            1 => [
+                'get-plain-field' => 1
+            ],
+            'get-plain-field' => 2
+        ];
+
+        // test body
+        $result = \Mezon\Functional\Functional::getFieldPlain($data, 'plain-field');
+
+        // assertions
+        $this->assertEquals(2, $result);
     }
 }

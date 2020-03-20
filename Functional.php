@@ -62,14 +62,14 @@ class Functional
     protected static function setExistingField(&$record, string $field, $value)
     {
         foreach ($record as $i => $v) {
-            if (is_array($v) || is_object($v)) {
-                self::setExistingField($v, $field, $value);
-            } elseif ($i == $field) {
+            if ($i == $field) {
                 if (is_object($record)) {
                     $record->$field = $value;
                 } else {
                     $record[$field] = $value;
                 }
+            } elseif (is_array($v) || is_object($v)) {
+                self::setExistingField($v, $field, $value);
             }
         }
     }
