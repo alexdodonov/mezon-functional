@@ -69,7 +69,11 @@ class Functional
                     $record[$field] = $value;
                 }
             } elseif (is_array($v) || is_object($v)) {
-                self::setExistingField($v, $field, $value);
+                if (is_array($record)) {
+                    self::setExistingField($record[$i], $field, $value);
+                } else {
+                    self::setExistingField($record->$i, $field, $value);
+                }
             }
         }
     }
@@ -88,7 +92,7 @@ class Functional
     {
         $existing = self::getField($record, $field);
 
-        if ($existing == null) {
+        if ($existing === null) {
             // add field if it does not exist
             if (is_object($record)) {
                 $record->$field = $value;

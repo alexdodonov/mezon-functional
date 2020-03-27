@@ -681,9 +681,33 @@ class FunctionalUnitTest extends \PHPUnit\Framework\TestCase
         ];
 
         // test body
-        $result = \Mezon\Functional\Functional::getFieldPlain($data, 'plain-field');
+        $result = \Mezon\Functional\Functional::getFieldPlain($data, 'get-plain-field');
 
         // assertions
         $this->assertEquals(2, $result);
+    }
+
+    /**
+     * Testing setExistingField method
+     */
+    public function testSetExistingField(): void
+    {
+        // setup
+        $object = new stdClass();
+        $object->rec4 = 0;
+        $data = [
+            'rec1' => [
+                'rec3' => 0
+            ],
+            'rec2' => $object
+        ];
+
+        // test body
+        \Mezon\Functional\Functional::setField($data, 'rec3', 33);
+        \Mezon\Functional\Functional::setField($data, 'rec4', 44);
+
+        // assertions
+        $this->assertEquals(33, \Mezon\Functional\Fetcher::getField($data, 'rec3'));
+        $this->assertEquals(44, \Mezon\Functional\Fetcher::getField($data, 'rec4'));
     }
 }

@@ -21,7 +21,7 @@ $obj3->foo = 3;
 $Data = array( $obj1 , $obj2 , $obj3 );
 
 // will display array( 1 , 2 ,3 )
-var_dump( Functional::getFields( $Data , 'foo' ) );
+var_dump( \Mezon\Functional\Fetcher::getFields( $Data , 'foo' ) );
 ```
 
 We can also set fields with multyple values:
@@ -105,16 +105,33 @@ Functional::transform( $Data , 'transform2x' );
 var_dump( $Data );
 ```
 
-But if you need more complex transformations, you can use class Transform.
+But if you need more complex transformations, you can use class Transform. It will allow you to build entirely new array.
 
 ```PHP
 $data = [
 	1 , 2
 ];
 
-Transform::convert($data,function($item){return [10*$item, 100*$item]});
+Transform::convert($data,function($item){return [10*$item, 100*$item];});
 
 var_dump($data);
 
 // will output
 // [10=>100 , 20=>200]
+```
+
+And if you want to transform only elements of the array, then use Transform::convertElements
+
+```PHP
+
+$data = [
+	1 , 2
+];
+
+Transform::convertElements($data,function($item){return 10 * $item;});
+
+var_dump($data);
+
+// will output
+// [0=>10 , 1=>20]
+```
