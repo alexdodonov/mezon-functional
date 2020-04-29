@@ -156,10 +156,12 @@ class Functional
         $sum = 0;
 
         foreach ($objects as $object) {
-            if (is_array($object)) {
-                $sum += self::sumFields($object, $fieldName);
-            } else {
+            if (is_array($object) && isset($object[$fieldName])) {
+                $sum += $object[$fieldName];
+            } elseif (is_object($object) && isset($object->$fieldName)) {
                 $sum += $object->$fieldName;
+            } else {
+                $sum += self::sumFields($object, $fieldName);
             }
         }
 

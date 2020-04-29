@@ -71,7 +71,17 @@ $obj3->foo = 3;
 $Data = array( $obj1 , array( $obj2 , $obj3 ) );
 
 // will display value 6
-$this->assertEquals( Functional::sumFields( $Data , 'foo' ) , 6 , 'Invalid sum' );
+var_dump(Functional::sumFields( $Data , 'foo' ));
+```
+
+And this code will also work:
+
+```php
+// will display value 3
+var_dump(Functional::sumFields( [
+    ['foo'=>1],
+    ['foo'=>2]
+] , 'foo' ));
 ```
 
 ## Transformations
@@ -122,7 +132,7 @@ var_dump($data);
 
 And if you want to transform only elements of the array, then use Transform::convertElements
 
-```PHP
+```php
 
 $data = [
 	1 , 2

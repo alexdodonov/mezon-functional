@@ -144,11 +144,12 @@ class FunctionalUnitTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Testing fields summation
+     * Data provider for the sumFields tests
+     *
+     * @return array data sets
      */
-    public function testFieldsSum(): void
+    public function sumFieldsDataProvider(): array
     {
-        // setup
         $obj1 = new stdClass();
         $obj1->foo = 1;
 
@@ -158,14 +159,56 @@ class FunctionalUnitTest extends \PHPUnit\Framework\TestCase
         $obj3 = new stdClass();
         $obj3->foo = 3;
 
-        $data = [
+        $data1 = [
             $obj1,
             $obj2,
             $obj3
         ];
 
+        $data2 = [
+            $obj1,
+            [
+                $obj2,
+                $obj3
+            ]
+        ];
+
+        return [
+            [
+                $data1,
+                6
+            ],
+            [
+                $data2,
+                6
+            ],
+            [
+                [
+                    [
+                        'foo' => 1
+                    ],
+                    [
+                        'foo' => 2
+                    ]
+                ],
+                3
+            ]
+        ];
+    }
+
+    /**
+     * Testing fields summation
+     *
+     * @param array $data
+     *            test data
+     * @param int $result
+     *            expected result
+     * @dataProvider sumFieldsDataProvider
+     */
+    public function testFieldsSum(array $data, int $result): void
+    {
         // test body and assertions
-        $this->assertEquals(\Mezon\Functional\Functional::sumFields($data, 'foo'), 6, 'Invalid sum');
+        $this->assertEquals(\Mezon\Functional\Functional::sumFields($data, 'foo'), $result, 'Invalid sum');
     }
 
     /**
@@ -196,33 +239,6 @@ class FunctionalUnitTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($data[0]->foo, 2, 'Invalid value');
         $this->assertEquals($data[1]->foo, 4, 'Invalid value');
         $this->assertEquals($data[2]->foo, 6, 'Invalid value');
-    }
-
-    /**
-     * Testing recursive fields summation
-     */
-    public function testRecursiveSum(): void
-    {
-        // setup
-        $obj1 = new stdClass();
-        $obj1->foo = 1;
-
-        $obj2 = new stdClass();
-        $obj2->foo = 2;
-
-        $obj3 = new stdClass();
-        $obj3->foo = 3;
-
-        $data = [
-            $obj1,
-            [
-                $obj2,
-                $obj3
-            ]
-        ];
-
-        // test body and assertions
-        $this->assertEquals(\Mezon\Functional\Functional::sumFields($data, 'foo'), 6, 'Invalid sum');
     }
 
     /**
