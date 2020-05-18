@@ -377,6 +377,7 @@ class Functional
      */
     public static function expandRecordsWith(array &$dest, string $destField, array $src, string $srcField): void
     {
+        // TODO add method wich unites single records - implodeRecords($arr1, $arr2) but with objects
         foreach ($dest as &$destRecord) {
             foreach ($src as $srcRecord) {
                 if (self::getField($destRecord, $destField, false) == self::getField($srcRecord, $srcField, false)) {
