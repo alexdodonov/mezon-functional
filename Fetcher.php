@@ -74,8 +74,9 @@ class Fetcher
      *            Field name
      * @param bool $recursive
      *            Shold we search the field $field along the whole object
+     * @return array list of fields values
      */
-    public static function getFields($data, string $field, $recursive = true)
+    public static function getFields($data, string $field, $recursive = true): array
     {
         $return = array();
 
