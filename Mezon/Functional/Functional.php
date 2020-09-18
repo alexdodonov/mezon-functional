@@ -25,11 +25,11 @@ class Functional
      * @param string $field
      *            Field name
      * @return mixed Field value
-     * @deprecated Use \Mezon\Functional\Fetcher::getFieldPlain instead. Deprecated since 2020-01-21
+     * @deprecated Use Fetcher::getFieldPlain instead. Deprecated since 2020-01-21
      */
     public static function getFieldPlain($record, string $field)
     {
-        return \Mezon\Functional\Fetcher::getFieldPlain($record, $field);
+        return Fetcher::getFieldPlain($record, $field);
     }
 
     /**
@@ -42,11 +42,11 @@ class Functional
      * @param bool $recursive
      *            Shold we search the field $field along the whole object
      * @return mixed Field value
-     * @deprecated Use \Mezon\Functional\Fetcher::getField instead. Deprecated since 2020-01-21
+     * @deprecated Use Fetcher::getField instead. Deprecated since 2020-01-21
      */
     public static function getField($record, string $field, bool $recursive = true)
     {
-        return \Mezon\Functional\Fetcher::getField($record, $field, $recursive);
+        return Fetcher::getField($record, $field, $recursive);
     }
 
     /**
@@ -90,7 +90,7 @@ class Functional
      */
     public static function setField(&$record, string $field, $value)
     {
-        $existing = self::getField($record, $field);
+        $existing = Fetcher::getField($record, $field);
 
         if ($existing === null) {
             // add field if it does not exist
@@ -114,11 +114,11 @@ class Functional
      *            Field name
      * @param bool $recursive
      *            Shold we search the field $field along the whole object
-     * @deprecated Use \Mezon\Functional\Fetcher::getFields instead. Deprecated since 2020-01-21
+     * @deprecated Use Fetcher::getFields instead. Deprecated since 2020-01-21
      */
     public static function getFields($data, string $field, $recursive = true)
     {
-        return \Mezon\Functional\Fetcher::getFields($data, $field, $recursive);
+        return Fetcher::getFields($data, $field, $recursive);
     }
 
     /**
@@ -175,11 +175,11 @@ class Functional
      *            Array of objects to be processed
      * @param callback $transformer
      *            Transform function
-     * @deprecated Use \Mezon\Functional\Transform::convertElements instead. Deprecated since 2020-01-21
+     * @deprecated Use Transform::convertElements instead. Deprecated since 2020-01-21
      */
     public static function transform(&$objects, $transformer)
     {
-        \Mezon\Functional\Transform::convertElements($objects, $transformer);
+        Transform::convertElements($objects, $transformer);
     }
 
     /**
@@ -193,28 +193,21 @@ class Functional
      *            Filtration operation
      * @param mixed $value
      *            Filtration value
-     * @param bool $recursive
-     *            Recursive mode
      * @return array List of filtered records
      * @deprecated Use \Functional\Transform::filter The method was marked as deprecated 2020/01/20
      */
-    public static function filter(
-        array &$objects,
-        string $field,
-        string $operation = '==',
-        $value = false,
-        bool $recursive = true): array
+    public static function filter(array &$objects, string $field, string $operation = '==', $value = false): array
     {
         $return = $objects;
 
         if ($operation == '==') {
-            \Mezon\Functional\Transform::filter($return, \Mezon\Functional\Compare::equal($field, $value));
+            Transform::filter($return, \Mezon\Functional\Compare::equal($field, $value));
         } elseif ($operation == '>') {
-            \Mezon\Functional\Transform::filter($return, \Mezon\Functional\Compare::greater($field, $value));
+            Transform::filter($return, \Mezon\Functional\Compare::greater($field, $value));
         } elseif ($operation == '<') {
-            \Mezon\Functional\Transform::filter($return, \Mezon\Functional\Compare::less($field, $value));
+            Transform::filter($return, \Mezon\Functional\Compare::less($field, $value));
         } else {
-            \Mezon\Functional\Transform::filter($return, \Mezon\Functional\Compare::notEqual($field, $value));
+            Transform::filter($return, \Mezon\Functional\Compare::notEqual($field, $value));
         }
 
         return $return;
@@ -328,7 +321,7 @@ class Functional
             self::setField(
                 $object,
                 $field,
-                self::filter($records, $recordField, '==', self::getField($object, $objectField, false), false));
+                self::filter($records, $recordField, '==', Fetcher::getField($object, $objectField, false), false));
         }
     }
 
@@ -356,10 +349,25 @@ class Functional
     {
         foreach ($objects as &$object) {
             foreach ($records as $record) {
-                if (self::getField($object, $objectField, false) == self::getField($record, $recordField, false)) {
+                if (Fetcher::getField($object, $objectField, false) == Fetcher::getField($record, $recordField, false)) {
                     self::setField($object, $field, $record);
                 }
             }
+        }
+    }
+
+    /**
+     * Method expands record $dest with frields of the $src
+     *
+     * @param array|object $dest
+     *            record to be expanded
+     * @param array|object $src
+     *            record to be the expander
+     */
+    public static function expandRecordWith(&$dest, $src): void
+    {
+        foreach ($src as $srcRecordField => $srcRecordValue) {
+            self::setField($dest, $srcRecordField, $srcRecordValue);
         }
     }
 
@@ -377,13 +385,10 @@ class Functional
      */
     public static function expandRecordsWith(array &$dest, string $destField, array $src, string $srcField): void
     {
-        // TODO add method wich unites single records - implodeRecords($arr1, $arr2) but with objects
         foreach ($dest as &$destRecord) {
             foreach ($src as $srcRecord) {
-                if (self::getField($destRecord, $destField, false) == self::getField($srcRecord, $srcField, false)) {
-                    foreach ($srcRecord as $srcRecordField => $srcRecordValue) {
-                        self::setField($destRecord, $srcRecordField, $srcRecordValue);
-                    }
+                if (Fetcher::getField($destRecord, $destField, false) == Fetcher::getField($srcRecord, $srcField, false)) {
+                    self::expandRecordWith($destRecord, $srcRecord);
 
                     break;
                 }
@@ -411,8 +416,8 @@ class Functional
         usort(
             $objects,
             function ($e1, $e2) use ($field, $direction) {
-                $value1 = self::getField($e1, $field, false);
-                $value2 = self::getField($e2, $field, false);
+                $value1 = Fetcher::getField($e1, $field, false);
+                $value2 = Fetcher::getField($e2, $field, false);
 
                 $result = 0;
 
@@ -440,7 +445,7 @@ class Functional
      */
     public static function fieldExistsPlain(&$record, string $field): bool
     {
-        return \Mezon\Functional\Fetcher::fieldExistsPlain($record, $field);
+        return Fetcher::fieldExistsPlain($record, $field);
     }
 
     /**
@@ -457,6 +462,6 @@ class Functional
      */
     public static function fieldExists(&$record, string $field, bool $recursive = true): bool
     {
-        return \Mezon\Functional\Fetcher::fieldExists($record, $field, $recursive);
+        return Fetcher::fieldExists($record, $field, $recursive);
     }
 }
