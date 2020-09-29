@@ -1,4 +1,5 @@
-# Functional programming # Base application class [![Build Status](https://travis-ci.com/alexdodonov/mezon-functional.svg?branch=master)](https://travis-ci.com/alexdodonov/mezon-functional) [![codecov](https://codecov.io/gh/alexdodonov/mezon-functional/branch/master/graph/badge.svg)](https://codecov.io/gh/alexdodonov/mezon-functional)
+# Functional programming
+[![Build Status](https://travis-ci.com/alexdodonov/mezon-functional.svg?branch=master)](https://travis-ci.com/alexdodonov/mezon-functional) [![codecov](https://codecov.io/gh/alexdodonov/mezon-functional/branch/master/graph/badge.svg)](https://codecov.io/gh/alexdodonov/mezon-functional)
 
 ## Intro
 
