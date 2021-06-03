@@ -173,11 +173,11 @@ class Functional
      *
      * @param array $objects
      *            Array of objects to be processed
-     * @param callback $transformer
+     * @param callable $transformer
      *            Transform function
      * @deprecated Use Transform::convertElements instead. Deprecated since 2020-01-21
      */
-    public static function transform(&$objects, $transformer)
+    public static function transform(array &$objects, callable $transformer)
     {
         Transform::convertElements($objects, $transformer);
     }
@@ -308,7 +308,6 @@ class Functional
      *            List of nested records
      * @param string $recordField
      *            Filtering field
-     * @return array List of tramsformed records
      */
     public static function setChildren(
         string $field,
@@ -338,7 +337,6 @@ class Functional
      *            List of nested records
      * @param string $recordField
      *            Filtering field
-     * @return array List of tramsformed records
      */
     public static function setChild(
         string $field,
