@@ -1,6 +1,11 @@
 <?php
+namespace Mezon\Functional\Tests;
 
-class TransformUnitTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+use Mezon\Functional\Transform;
+
+/** @psalm-suppress PropertyNotSetInConstructor */
+class TransformUnitTest extends TestCase
 {
 
     /**
@@ -21,7 +26,7 @@ class TransformUnitTest extends \PHPUnit\Framework\TestCase
         ];
 
         // test body
-        \Mezon\Functional\Transform::convert($data, \Mezon\Functional\Transform::arrayToKeyValue('id', 'title'));
+        Transform::convert($data, Transform::arrayToKeyValue('id', 'title'));
 
         // assertions
         $this->assertTrue(isset($data[1]));

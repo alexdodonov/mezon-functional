@@ -66,8 +66,8 @@ class Transform
     {
         return function ($record) use ($keyFieldName, $valueFieldName) {
             return [
-                \Mezon\Functional\Functional::getField($record, $keyFieldName),
-                \Mezon\Functional\Functional::getField($record, $valueFieldName)
+                Fetcher::getField($record, $keyFieldName),
+                Fetcher::getField($record, $valueFieldName)
             ];
         };
     }
