@@ -59,7 +59,7 @@ class Functional
      * @param mixed $value
      *            Value to be set
      */
-    protected static function setExistingField(&$record, string $field, $value)
+    protected static function setExistingField(&$record, string $field, $value): void
     {
         foreach ($record as $i => $v) {
             if ($i == $field) {
@@ -88,7 +88,7 @@ class Functional
      * @param mixed $value
      *            Value to be set
      */
-    public static function setField(&$record, string $field, $value)
+    public static function setField(&$record, string $field, $value): void
     {
         $existing = Fetcher::getField($record, $field);
 
@@ -114,6 +114,7 @@ class Functional
      *            Field name
      * @param bool $recursive
      *            Shold we search the field $field along the whole object
+     * @return mixed value of the field
      * @deprecated Use Fetcher::getFields instead. Deprecated since 2020-01-21
      */
     public static function getFields($data, string $field, $recursive = true)
@@ -131,7 +132,7 @@ class Functional
      * @param array $values
      *            Values to be set
      */
-    public static function setFieldsInObjects(&$objects, string $fieldName, array $values)
+    public static function setFieldsInObjects(&$objects, string $fieldName, array $values): void
     {
         foreach ($values as $i => $value) {
             if (isset($objects[$i]) === false) {
@@ -177,7 +178,7 @@ class Functional
      *            Transform function
      * @deprecated Use Transform::convertElements instead. Deprecated since 2020-01-21
      */
-    public static function transform(array &$objects, callable $transformer)
+    public static function transform(array &$objects, callable $transformer): void
     {
         Transform::convertElements($objects, $transformer);
     }
@@ -414,8 +415,14 @@ class Functional
     {
         usort(
             $objects,
-            /** @param array|object $e1 the first record 
-             * @param array|object $e2 the second record */function ($e1, $e2) use ($field, $direction) {
+            /**
+             *
+             * @param array|object $e1
+             *            the first record
+             * @param array|object $e2
+             *            the second record
+             */
+            function ($e1, $e2) use ($field, $direction) {
                 $value1 = Fetcher::getField($e1, $field, false);
                 $value2 = Fetcher::getField($e2, $field, false);
 

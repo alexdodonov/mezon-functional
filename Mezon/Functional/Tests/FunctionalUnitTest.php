@@ -460,10 +460,8 @@ class FunctionalUnitTest extends TestCase
         ]);
 
         // assertions
-        $this->assertArrayHasKey('id2', $object);
-        $this->assertArrayHasKey('field2', $object);
-        $this->assertEquals(1, $object['id2']);
-        $this->assertEquals('f', $object['field2']);
+        $this->assertEquals(1, Fetcher::getField($object, 'id2'));
+        $this->assertEquals('f', Fetcher::getField($object, 'field2'));
     }
 
     /**
