@@ -216,7 +216,7 @@ class Functional
     /**
      * Method replaces one field to another in record
      *
-     * @param array $object
+     * @param array|object|mixed $object
      *            Object to be processed
      * @param string $fieldFrom
      *            Field name to be replaced
@@ -245,7 +245,7 @@ class Functional
     /**
      * Method replaces one field to another in record
      *
-     * @param array $object
+     * @param array|object $object
      *            Object to be processed
      * @param array $fieldsFrom
      *            Field names to be replaced
@@ -308,6 +308,7 @@ class Functional
      *            List of nested records
      * @param string $recordField
      *            Filtering field
+     * @psalm-suppress DeprecatedMethod
      */
     public static function setChildren(
         string $field,
@@ -320,7 +321,7 @@ class Functional
             self::setField(
                 $object,
                 $field,
-                self::filter($records, $recordField, '==', Fetcher::getField($object, $objectField, false), false));
+                self::filter($records, $recordField, '==', Fetcher::getField($object, $objectField, false)));
         }
     }
 
@@ -413,7 +414,8 @@ class Functional
     {
         usort(
             $objects,
-            function ($e1, $e2) use ($field, $direction) {
+            /** @param array|object $e1 the first record 
+             * @param array|object $e2 the second record */function ($e1, $e2) use ($field, $direction) {
                 $value1 = Fetcher::getField($e1, $field, false);
                 $value2 = Fetcher::getField($e2, $field, false);
 

@@ -3,6 +3,7 @@ namespace Mezon\Functional\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Mezon\Functional\Functional;
+use Mezon\Functional\Fetcher;
 
 /**
  *
@@ -435,8 +436,7 @@ class FunctionalUnitTest extends TestCase
         Functional::replaceFieldInEntity($object, 'id', 'id2');
 
         // assertions
-        $this->assertArrayHasKey('id2', $object);
-        $this->assertEquals(1, $object['id2']);
+        $this->assertEquals(1, Fetcher::getField($object, 'id2'));
     }
 
     /**
