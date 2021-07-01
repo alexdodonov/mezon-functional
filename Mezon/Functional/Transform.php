@@ -64,7 +64,12 @@ class Transform
      */
     public static function arrayToKeyValue(string $keyFieldName, string $valueFieldName): callable
     {
-        return /** @param array|object $record record to be transformed */function ($record) use ($keyFieldName, $valueFieldName) {
+        return /**
+         *
+         * @param array|object $record
+         *            record to be transformed
+         */
+        function ($record) use ($keyFieldName, $valueFieldName) {
             return [
                 Fetcher::getField($record, $keyFieldName),
                 Fetcher::getField($record, $valueFieldName)

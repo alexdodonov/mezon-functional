@@ -9,13 +9,13 @@
 
 	<testsuites>
 		<testsuite name="All Tests">
-			<directory suffix="UnitTest.php">./Mezon/Functional/Tests</directory>
+			<directory suffix="UnitTest.php">./Mezon</directory>
 		</testsuite>
 	</testsuites>
 
 	<filter>
 		<whitelist addUncoveredFilesFromWhitelist="false">
-			<directory>./Mezon/Functional/</directory>
+			<directory>./Mezon/</directory>
 			<exclude>
 				<directory suffix="Test.php">./</directory>
 				<directory>vendor</directory>
