@@ -4,7 +4,7 @@
 			"./Mezon/Functional"
 		],
 		"excludes": [
-			"./Mezon/Functional/Tests"
+			"Tests"
 		]
 	},
 	"phpUnit": {
