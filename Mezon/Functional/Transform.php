@@ -97,4 +97,33 @@ class Transform
 
         $records = $result;
     }
+    
+    /**
+     * Method creates hash ffrom list of records by their field value
+     *
+     * @param array $data
+     *            origin array of records
+     * @param string $field
+     *            field name
+     * @return array hash
+     */
+    public static function hashByField(array $data, string $field): array
+    {
+        $fieldValues = Fetcher::getFields($data, $field);
+        $fieldValues = array_unique($fieldValues);
+        
+        $result = [];
+        
+        foreach ($fieldValues as $fieldValue) {
+            $result[$fieldValue] = [];
+            
+            foreach ($data as $record) {
+                if (Fetcher::getField($record, $field) === $fieldValue) {
+                    $result[$fieldValue][] = $record;
+                }
+            }
+        }
+        
+        return $result;
+    }
 }
