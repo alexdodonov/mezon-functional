@@ -20,10 +20,11 @@ class Transform
     /**
      * Method converts one array to another
      *
-     * @param array $records
+     * @param
+     *            array<array-key, array|object> $records
      *            records to be converted
-     * @param callable $converter
-     *            converter
+     * @param callable(mixed):array{0:array-key, 1: mixed} $converter converter
+     * @psalm-suppress MixedAssignment
      */
     public static function convert(array &$records, callable $converter): void
     {
@@ -41,10 +42,11 @@ class Transform
     /**
      * Method converts one array to another
      *
-     * @param array $records
+     * @param mixed[] $records
      *            records to be converted
-     * @param callable $converter
+     * @param callable(mixed) $converter
      *            converter
+     * @psalm-suppress MixedAssignment
      */
     public static function convertElements(array &$records, callable $converter): void
     {
@@ -80,10 +82,12 @@ class Transform
     /**
      * Method filters
      *
-     * @param array $records
+     * @param
+     *            array<array-key, array|object> $records
      *            records to be converted
      * @param callable $filter
      *            filtration fuction
+     * @psalm-suppress MixedAssignment
      */
     public static function filter(array &$records, callable $filter): void
     {
@@ -97,11 +101,11 @@ class Transform
 
         $records = $result;
     }
-    
+
     /**
      * Method creates hash ffrom list of records by their field value
      *
-     * @param array $data
+     * @param array[]|object[] $data
      *            origin array of records
      * @param string $field
      *            field name
@@ -109,21 +113,29 @@ class Transform
      */
     public static function hashByField(array $data, string $field): array
     {
+        /**
+         *
+         * @var string[]
+         */
         $fieldValues = Fetcher::getFields($data, $field);
         $fieldValues = array_unique($fieldValues);
-        
+
+        /**
+         *
+         * @var array<string, array<mixed>>
+         */
         $result = [];
-        
+
         foreach ($fieldValues as $fieldValue) {
             $result[$fieldValue] = [];
-            
+
             foreach ($data as $record) {
                 if (Fetcher::getField($record, $field) === $fieldValue) {
                     $result[$fieldValue][] = $record;
                 }
             }
         }
-        
+
         return $result;
     }
 }
