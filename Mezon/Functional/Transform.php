@@ -21,15 +21,18 @@ class Transform
      * Method converts one array to another
      *
      * @param
-     *            array<array-key, array|object> $records
+     *            mixed[] $records
      *            records to be converted
-     * @param callable(mixed):array{0:array-key, 1: mixed} $converter converter
-     * @psalm-suppress MixedAssignment
+     * @param
+     *            callable(mixed):array{0:array-key, 1: mixed} $converter converter
+     * @psalm-suppress MixedAssignment, MixedArrayOffset, MixedArrayAccess, MixedArrayAssignment
      */
     public static function convert(array &$records, callable $converter): void
     {
+        /** @var mixed $result */
         $result = [];
 
+        /** @var mixed $record */
         foreach ($records as $record) {
             list ($key, $value) = $converter($record);
 
@@ -44,12 +47,13 @@ class Transform
      *
      * @param mixed[] $records
      *            records to be converted
-     * @param callable(mixed) $converter
+     * @param callable(mixed):mixed $converter
      *            converter
      * @psalm-suppress MixedAssignment
      */
     public static function convertElements(array &$records, callable $converter): void
     {
+        /** @var mixed $record */
         foreach ($records as $i => $record) {
             $records[$i] = $converter($record);
         }
@@ -87,12 +91,12 @@ class Transform
      *            records to be converted
      * @param callable $filter
      *            filtration fuction
-     * @psalm-suppress MixedAssignment
      */
     public static function filter(array &$records, callable $filter): void
     {
         $result = [];
 
+        /** @var array|object $record */
         foreach ($records as $key => $record) {
             if ($filter($record)) {
                 $result[$key] = $record;
@@ -109,21 +113,15 @@ class Transform
      *            origin array of records
      * @param string $field
      *            field name
-     * @return array hash
+     * @return array[] hash
      */
     public static function hashByField(array $data, string $field): array
     {
-        /**
-         *
-         * @var string[]
-         */
+        /** @var string[] $fieldValues */
         $fieldValues = Fetcher::getFields($data, $field);
         $fieldValues = array_unique($fieldValues);
 
-        /**
-         *
-         * @var array<string, array<mixed>>
-         */
+        /** @var array<string, array<mixed>> $result */
         $result = [];
 
         foreach ($fieldValues as $fieldValue) {

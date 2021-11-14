@@ -531,6 +531,7 @@ class FunctionalUnitTest extends TestCase
         Functional::expandRecordsWith($arr1, 'id', $arr2, 'id');
 
         // assertions
+        /** @var list<array{f: int}> $arr */
         $this->assertTrue(isset($arr1[0]['f']), 'Field was not merged');
         $this->assertEquals(11, $arr1[0]['f'], 'Field was not merged');
 
@@ -559,6 +560,7 @@ class FunctionalUnitTest extends TestCase
         Functional::sortRecords($arr, 'i');
 
         // assertions
+        /** @var list<array{i: int}> $arr */
         $this->assertEquals(1, $arr[0]['i']);
         $this->assertEquals(2, $arr[1]['i']);
         $this->assertEquals(3, $arr[2]['i']);
@@ -589,6 +591,7 @@ class FunctionalUnitTest extends TestCase
         Functional::sortRecords($arr, 'i', Functional::SORT_DIRECTION_DESC);
 
         // assertions
+        /** @var list<array{i: int}> $arr */
         $this->assertEquals(3, $arr[0]['i']);
         $this->assertEquals(2, $arr[1]['i']);
         $this->assertEquals(1, $arr[2]['i']);
@@ -625,6 +628,7 @@ class FunctionalUnitTest extends TestCase
         Functional::setChild('nested', $objects, 'id', $records, 'f');
 
         // assertions
+        /** @var array<array-key, array{nested: array}> $objects */
         $this->assertEquals(1, $objects[0]['nested']['f'], 'Record was not nested');
         $this->assertEquals(3, $objects[1]['nested']['f'], 'Record was not nested');
     }
@@ -717,7 +721,8 @@ class FunctionalUnitTest extends TestCase
         ];
 
         // test body
-        $result = Functional::getFieldPlain($data, 'get-plain-field');
+        /** @var int */
+        $result = Fetcher::getFieldPlain($data, 'get-plain-field');
 
         // assertions
         $this->assertEquals(2, $result);
