@@ -366,6 +366,8 @@ class Functional
      */
     public static function expandRecordWith(&$dest, $src): void
     {
+        /** @var mixed $srcRecordValue
+         @var string $srcRecordField */
         foreach ($src as $srcRecordField => $srcRecordValue) {
             self::setField($dest, $srcRecordField, $srcRecordValue);
         }
@@ -385,7 +387,9 @@ class Functional
      */
     public static function expandRecordsWith(array &$dest, string $destField, array $src, string $srcField): void
     {
+        /** @var array|object $destRecord */
         foreach ($dest as &$destRecord) {
+            /** @var array|object $srcRecord */
             foreach ($src as $srcRecord) {
                 if (Fetcher::getField($destRecord, $destField, false) == Fetcher::getField($srcRecord, $srcField, false)) {
                     self::expandRecordWith($destRecord, $srcRecord);
@@ -406,38 +410,44 @@ class Functional
     /**
      * Method sorts records by the specified field
      *
-     * @param array $objects
-     *            Records to be sorted
+     * @param mixed[] $objects
+     *            records to be sorted
      * @param string $field
-     *            Field name
+     *            field name
+     * @param int $direction
+     *            direction of sorting
      */
     public static function sortRecords(array &$objects, string $field, int $direction = Functional::SORT_DIRECTION_ASC): void
     {
-        usort(
-            $objects,
-            /**
-             *
-             * @param array|object $e1
-             *            the first record
-             * @param array|object $e2
-             *            the second record
-             */
-            function ($e1, $e2) use ($field, $direction) {
-                $value1 = Fetcher::getField($e1, $field, false);
-                $value2 = Fetcher::getField($e2, $field, false);
+        /** @var callable(mixed, mixed):int $sort */
+        $sort = /**
+         *
+         * @param array|object $e1
+         *            the first record
+         * @param array|object $e2
+         *            the second record
+         * @return int sorting order
+         */
+        function ($e1, $e2) use ($field, $direction) {
+            /** @var mixed $value1 */
+            $value1 = Fetcher::getField($e1, $field, false);
+            /** @var mixed $value2 */
+            $value2 = Fetcher::getField($e2, $field, false);
 
+            $result = 0;
+
+            if ($value1 < $value2) {
+                $result = - 1;
+            } elseif ($value1 == $value2) {
                 $result = 0;
+            } else {
+                $result = 1;
+            }
 
-                if ($value1 < $value2) {
-                    $result = - 1;
-                } elseif ($value1 == $value2) {
-                    $result = 0;
-                } else {
-                    $result = 1;
-                }
+            return $direction === Functional::SORT_DIRECTION_ASC ? $result : - 1 * $result;
+        };
 
-                return $direction === Functional::SORT_DIRECTION_ASC ? $result : - 1 * $result;
-            });
+        usort($objects, $sort);
     }
 
     /**
