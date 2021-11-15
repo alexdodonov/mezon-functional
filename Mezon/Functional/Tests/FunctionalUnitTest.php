@@ -25,10 +25,11 @@ class FunctionalUnitTest extends TestCase
         ];
 
         // test body
+        /** @var string $result */
         $result = Functional::getField($arr, 'foo');
 
         // assertions
-        $this->assertEquals($result, 'bar');
+        $this->assertEquals('bar', $result);
     }
 
     /**
@@ -45,10 +46,11 @@ class FunctionalUnitTest extends TestCase
         ];
 
         // test body
+        /** @var string $result */
         $result = Functional::getField($arr, 'foo2');
 
         // assertions
-        $this->assertEquals($result, 'bar2');
+        $this->assertEquals('bar2', $result);
     }
 
     /**
@@ -63,10 +65,11 @@ class FunctionalUnitTest extends TestCase
         $obj->foo = 'bar';
 
         // test body
+        /** @var string $result */
         $result = Functional::getField($obj, 'foo');
 
         // assertions
-        $this->assertEquals($result, 'bar');
+        $this->assertEquals('bar', $result);
     }
 
     /**
@@ -82,10 +85,11 @@ class FunctionalUnitTest extends TestCase
         $obj->foo2 = 'bar2';
 
         // test body
+        /** @var string $result */
         $result = Functional::getField($obj, 'foo2');
 
         // assertions
-        $this->assertEquals($result, 'bar2');
+        $this->assertEquals('bar2', $result);
     }
 
     /**
@@ -112,14 +116,15 @@ class FunctionalUnitTest extends TestCase
         ];
 
         // test body
+        /** @var array $result */
         $result = Functional::getFields($data, 'foo');
 
         // assertions
-        $this->assertEquals(count($result), 3, 'Invalid count');
+        $this->assertCount(3, $result);
 
-        $this->assertEquals($result[0], 1);
-        $this->assertEquals($result[1], 2);
-        $this->assertEquals($result[2], 3);
+        $this->assertEquals(1, $result[0]);
+        $this->assertEquals(2, $result[1]);
+        $this->assertEquals(3, $result[2]);
     }
 
     /**
@@ -145,6 +150,7 @@ class FunctionalUnitTest extends TestCase
         Functional::setFieldsInObjects($data, 'foo', $values);
 
         // assertions
+        /** @var list<object{foo: int}> $data */
         $this->assertCount(3, $data, 'Invalid count');
 
         $this->assertEquals($data[0]->foo, 1);
@@ -244,16 +250,20 @@ class FunctionalUnitTest extends TestCase
         ];
 
         // test body
-        Functional::transform($data, function (object $object) {
-            $object->foo *= 2;
+        Functional::transform(
+            $data,
+            function (object $object) {
+                /** @var object{foo: int} $object */
+                $object->foo *= 2;
 
-            return $object;
-        });
+                return $object;
+            });
 
         // assertions
-        $this->assertEquals($data[0]->foo, 2);
-        $this->assertEquals($data[1]->foo, 4);
-        $this->assertEquals($data[2]->foo, 6);
+        /** @var list<object{foo: int}> $data */
+        $this->assertEquals(2, $data[0]->foo);
+        $this->assertEquals(4, $data[1]->foo);
+        $this->assertEquals(6, $data[2]->foo);
     }
 
     /**
@@ -388,6 +398,7 @@ class FunctionalUnitTest extends TestCase
         Functional::replaceField($records, 'from', 'to');
 
         // assertions
+        /** @var list<object{to: int}> $records */
         $this->assertTrue(isset($records[0]->to));
         $this->assertTrue(isset($records[1]->to));
 
@@ -418,6 +429,7 @@ class FunctionalUnitTest extends TestCase
         ]);
 
         // assertions
+        /** @var list<array> $objects */
         $this->assertEquals(1, $objects[0]['_id']);
         $this->assertEquals('f', $objects[0]['_field']);
     }
@@ -494,11 +506,12 @@ class FunctionalUnitTest extends TestCase
         Functional::setChildren('children', $objects, 'id', $records, 'f');
 
         // assertions
-        $this->assertTrue(isset($objects[0]['children']), 'Field was not created correctly');
-        $this->assertTrue(isset($objects[1]['children']), 'Field was not created correctly');
+        /** @var list<array{children: array}> $objects */
+        $this->assertTrue(isset($objects[0]['children']));
+        $this->assertTrue(isset($objects[1]['children']));
 
-        $this->assertEquals(2, count($objects[0]['children']), 'Records were not joined');
-        $this->assertEquals(0, count($objects[1]['children']), 'Records were not joined');
+        $this->assertCount(2, $objects[0]['children']);
+        $this->assertCount(0, $objects[1]['children']);
     }
 
     /**

@@ -12,7 +12,7 @@
 	],
 	"require-dev": {
 		"phpunit/phpunit": "^8.5",
-        "vimeo/psalm": "^4.2",
+		"vimeo/psalm": "^4.2",
 		"infection/infection": "^0.21.5"
 	},
 	"require": {
@@ -32,8 +32,8 @@
 		}
 	},
 	"scripts": {
-		"test": "php ./vendor/phpunit/phpunit/phpunit",
-		"psalm": "php ./vendor/vimeo/psalm/psalm --show-info=true",
-		"infection" : "php ./vendor/infection/infection/bin/infection"
+		"test": "php ./vendor/phpunit/phpunit/phpunit --order-by=random",
+		"psalm": "php ./vendor/vimeo/psalm/psalm --show-info=true --no-cache",
+		"infection": "php ./vendor/infection/infection/bin/infection"
 	}
 }
