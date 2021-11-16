@@ -51,6 +51,7 @@ class Fetcher
     public static function fieldExists(&$record, string $field, bool $recursive = true): bool
     {
         if ($recursive) {
+            /** @var mixed $v */
             foreach ($record as $v) {
                 if (is_array($v) || is_object($v)) {
                     $result = self::fieldExists($v, $field);
@@ -69,17 +70,20 @@ class Fetcher
      * Method fetches all fields from objects/arrays of an array
      *
      * @param mixed $data
-     *            Processing record
+     *            processing record
      * @param string $field
-     *            Field name
+     *            field name
      * @param bool $recursive
-     *            Shold we search the field $field along the whole object
+     *            shold we search the field $field along the whole object
      * @return array list of fields values
+     * @psalm-suppress MixedAssignment
      */
     public static function getFields($data, string $field, $recursive = true): array
     {
-        $return = array();
+        /** @var mixed[] $return */
+        $return = [];
 
+        /** @var mixed $record */
         foreach ($data as $record) {
             $return[] = self::getField($record, $field, $recursive);
         }
@@ -91,18 +95,20 @@ class Fetcher
      * Method returns field of the object/array
      *
      * @param mixed $record
-     *            Processing record
+     *            processing record
      * @param string $field
-     *            Field name
+     *            field name
      * @param bool $recursive
-     *            Shold we search the field $field along the whole object
-     * @return mixed Field value
+     *            shold we search the field $field along the whole object
+     * @return mixed field value
      */
     public static function getField($record, string $field, bool $recursive = true)
     {
         if ($recursive) {
+            /** @var mixed $v */
             foreach ($record as $v) {
                 if (is_array($v) || is_object($v)) {
+                    /** @var mixed $result */
                     $result = self::getField($v, $field);
 
                     if ($result !== null) {
@@ -119,9 +125,9 @@ class Fetcher
      * Method returns field of the object/array without recursinve inspection
      *
      * @param mixed $record
-     *            Processing record
+     *            processing record
      * @param string $field
-     *            Field name
+     *            field name
      * @return mixed Field value
      */
     public static function getFieldPlain($record, string $field)

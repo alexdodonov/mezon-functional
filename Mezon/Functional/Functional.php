@@ -53,25 +53,32 @@ class Functional
      * Method sets existing field of the object/array
      *
      * @param mixed $record
-     *            Processing record
+     *            processing record
      * @param string $field
-     *            Field name
+     *            field name
      * @param mixed $value
-     *            Value to be set
+     *            value to be set
+     * @psalm-suppress MixedAssignment
      */
     protected static function setExistingField(&$record, string $field, $value): void
     {
+        /** @var array-key|string $i
+            @var mixed $v */
         foreach ($record as $i => $v) {
             if ($i == $field) {
                 if (is_object($record)) {
                     $record->$field = $value;
                 } else {
+                    /** @var mixed[] $record */
                     $record[$field] = $value;
                 }
             } elseif (is_array($v) || is_object($v)) {
                 if (is_array($record)) {
+                    /** @var array $record 
+                        @var array-key $i*/
                     self::setExistingField($record[$i], $field, $value);
                 } else {
+                    /** @var object $record */
                     self::setExistingField($record->$i, $field, $value);
                 }
             }
@@ -82,11 +89,12 @@ class Functional
      * Method sets field of the object/array
      *
      * @param mixed $record
-     *            Processing record
+     *            processing record
      * @param string $field
-     *            Field name
+     *            field name
      * @param mixed $value
-     *            Value to be set
+     *            value to be set
+     * @psalm-suppress MixedAssignment, MixedArrayAssignment
      */
     public static function setField(&$record, string $field, $value): void
     {
@@ -109,13 +117,13 @@ class Functional
      * Method fetches all fields from objects/arrays of an array
      *
      * @param mixed $data
-     *            Processing record
+     *            processing record
      * @param string $field
-     *            Field name
+     *            field name
      * @param bool $recursive
-     *            Shold we search the field $field along the whole object
+     *            chold we search the field $field along the whole object
      * @return mixed value of the field
-     * @deprecated Use Fetcher::getFields instead. Deprecated since 2020-01-21
+     * @deprecated use Fetcher::getFields instead. Deprecated since 2020-01-21
      */
     public static function getFields($data, string $field, $recursive = true)
     {
@@ -134,6 +142,7 @@ class Functional
      */
     public static function setFieldsInObjects(&$objects, string $fieldName, array $values): void
     {
+        /** @var mixed $value */
         foreach ($values as $i => $value) {
             if (isset($objects[$i]) === false) {
                 $objects[$i] = new \stdClass();
@@ -144,28 +153,31 @@ class Functional
     }
 
     /**
-     * Method sums fields in an array of objects.
+     * Method sums fields in an array of objects
      *
      * @param array $objects
-     *            Array of objects to be processed
+     *            array of objects to be processed
      * @param string $fieldName
-     *            Field name
-     * @return mixed Sum of fields.
+     *            field name
+     * @return float|int sum of fields
+     * @psalm-suppress MixedAssignment, MixedOperand
      */
     public static function sumFields(&$objects, $fieldName)
     {
         $sum = 0;
 
-        foreach ($objects as $object) {
-            if (is_array($object) && isset($object[$fieldName])) {
-                $sum += $object[$fieldName];
-            } elseif (is_object($object) && isset($object->$fieldName)) {
-                $sum += $object->$fieldName;
+        foreach ($objects as $item) {
+            if (is_array($item) && isset($item[$fieldName])) {
+                $sum += $item[$fieldName];
+            } elseif (is_object($item) && isset($item->$fieldName)) {
+                $sum += $item->$fieldName;
             } else {
-                $sum += self::sumFields($object, $fieldName);
+                /** @var array $item */
+                $sum += self::sumFields($item, $fieldName);
             }
         }
 
+        /** @var float|int $sum */
         return $sum;
     }
 
@@ -173,10 +185,10 @@ class Functional
      * Method transforms objects in array
      *
      * @param array $objects
-     *            Array of objects to be processed
-     * @param callable $transformer
-     *            Transform function
-     * @deprecated Use Transform::convertElements instead. Deprecated since 2020-01-21
+     *            array of objects to be processed
+     * @param callable(mixed):mixed $transformer
+     *            transform function
+     * @deprecated use Transform::convertElements instead. Deprecated since 2020-01-21
      */
     public static function transform(array &$objects, callable $transformer): void
     {
@@ -223,6 +235,7 @@ class Functional
      *            Field name to be replaced
      * @param string $fieldTo
      *            Field name to be added
+     * @psalm-suppress MixedAssignment
      */
     public static function replaceFieldInEntity(&$object, string $fieldFrom, string $fieldTo): void
     {
@@ -248,13 +261,14 @@ class Functional
      *
      * @param array|object $object
      *            Object to be processed
-     * @param array $fieldsFrom
+     * @param string[] $fieldsFrom
      *            Field names to be replaced
-     * @param array $fieldsTo
+     * @param string[] $fieldsTo
      *            Field names to be added
      */
     public static function replaceFieldsInEntity(&$object, array $fieldsFrom, array $fieldsTo): void
     {
+        /** @var string $fieldFrom */
         foreach ($fieldsFrom as $i => $fieldFrom) {
             self::replaceFieldInEntity($object, $fieldFrom, $fieldsTo[$i]);
         }
@@ -263,15 +277,17 @@ class Functional
     /**
      * Method replaces one field to another in array of records
      *
-     * @param array $objects
+     * @param mixed[] $objects
      *            Objects to be processed
      * @param string $fieldFrom
      *            Field name to be replaced
      * @param string $fieldTo
      *            Field name to be added
+     * @psalm-suppress MixedAssignment
      */
     public static function replaceField(array &$objects, string $fieldFrom, string $fieldTo): void
     {
+        /** @var array|object $object */
         foreach ($objects as $i => $object) {
             self::replaceFieldInEntity($object, $fieldFrom, $fieldTo);
 
@@ -282,11 +298,11 @@ class Functional
     /**
      * Method replaces one field toanother in array of records
      *
-     * @param array $objects
+     * @param mixed[] $objects
      *            Objects to be processed
-     * @param array $fieldsFrom
+     * @param string[] $fieldsFrom
      *            Field names to be replaced
-     * @param array $fieldsTo
+     * @param string[] $fieldsTo
      *            Field names to be added
      */
     public static function replaceFields(array &$objects, array $fieldsFrom, array $fieldsTo): void
@@ -302,7 +318,7 @@ class Functional
      * @param string $field
      *            Field name
      * @param array $objects
-     *            The original record of objects
+     *            The original array of objects
      * @param string $objectField
      *            Filtering field
      * @param array $records
@@ -318,6 +334,7 @@ class Functional
         array $records,
         string $recordField): void
     {
+        /** @var array|object $object */
         foreach ($objects as &$object) {
             self::setField(
                 $object,
@@ -347,7 +364,9 @@ class Functional
         array $records,
         string $recordField): void
     {
+        /** @var array|object $object */
         foreach ($objects as &$object) {
+            /** @var array|object $record */
             foreach ($records as $record) {
                 if (Fetcher::getField($object, $objectField, false) == Fetcher::getField($record, $recordField, false)) {
                     self::setField($object, $field, $record);
@@ -366,8 +385,11 @@ class Functional
      */
     public static function expandRecordWith(&$dest, $src): void
     {
-        /** @var mixed $srcRecordValue
-         @var string $srcRecordField */
+        /**
+         *
+         * @var mixed $srcRecordValue
+         * @var string $srcRecordField
+         */
         foreach ($src as $srcRecordField => $srcRecordValue) {
             self::setField($dest, $srcRecordField, $srcRecordValue);
         }
