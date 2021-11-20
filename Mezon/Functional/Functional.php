@@ -74,8 +74,6 @@ class Functional
                 }
             } elseif (is_array($v) || is_object($v)) {
                 if (is_array($record)) {
-                    /** @var array $record 
-                        @var array-key $i*/
                     self::setExistingField($record[$i], $field, $value);
                 } else {
                     /** @var object $record */
@@ -160,7 +158,7 @@ class Functional
      * @param string $fieldName
      *            field name
      * @return float|int sum of fields
-     * @psalm-suppress MixedAssignment, MixedOperand
+     * @psalm-suppress MixedAssignment, MixedOperand, MixedArgument
      */
     public static function sumFields(&$objects, $fieldName)
     {
@@ -172,7 +170,6 @@ class Functional
             } elseif (is_object($item) && isset($item->$fieldName)) {
                 $sum += $item->$fieldName;
             } else {
-                /** @var array $item */
                 $sum += self::sumFields($item, $fieldName);
             }
         }
@@ -268,7 +265,6 @@ class Functional
      */
     public static function replaceFieldsInEntity(&$object, array $fieldsFrom, array $fieldsTo): void
     {
-        /** @var string $fieldFrom */
         foreach ($fieldsFrom as $i => $fieldFrom) {
             self::replaceFieldInEntity($object, $fieldFrom, $fieldsTo[$i]);
         }
@@ -455,8 +451,6 @@ class Functional
             $value1 = Fetcher::getField($e1, $field, false);
             /** @var mixed $value2 */
             $value2 = Fetcher::getField($e2, $field, false);
-
-            $result = 0;
 
             if ($value1 < $value2) {
                 $result = - 1;

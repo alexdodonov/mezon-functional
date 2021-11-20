@@ -252,8 +252,11 @@ class FunctionalUnitTest extends TestCase
         // test body
         Functional::transform(
             $data,
+            /**
+             * 
+             * @param object{foo: int} $object
+             */
             function (object $object) {
-                /** @var object{foo: int} $object */
                 $object->foo *= 2;
 
                 return $object;
