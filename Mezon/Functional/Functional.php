@@ -18,21 +18,6 @@ class Functional
 {
 
     /**
-     * Method returns field of the object/array without recursinve inspection
-     *
-     * @param mixed $record
-     *            Processing record
-     * @param string $field
-     *            Field name
-     * @return mixed Field value
-     * @deprecated Use Fetcher::getFieldPlain instead. Deprecated since 2020-01-21
-     */
-    public static function getFieldPlain($record, string $field)
-    {
-        return Fetcher::getFieldPlain($record, $field);
-    }
-
-    /**
      * Method returns field of the object/array
      *
      * @param mixed $record
