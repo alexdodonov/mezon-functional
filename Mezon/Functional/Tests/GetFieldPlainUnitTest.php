@@ -16,7 +16,7 @@ class GetFieldPlainUnitTest extends TestCase
      *
      * @return array testing data
      */
-    public function getFieldPlainDataProvider(): array
+    public static function getFieldPlainDataProvider(): array
     {
         $obj1 = new \stdClass();
         $obj1->field = 'object value';

@@ -17,6 +17,7 @@ class FieldExistsUnitTest extends TestCase
      */
     public function testFieldExists(): void
     {
+        // TODO прибить все deprecated методы и выпустить новую версию пакета
         // setup
         $arr = [
             'f1' => 1,

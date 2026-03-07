@@ -163,7 +163,7 @@ class FunctionalUnitTest extends TestCase
      *
      * @return array data sets
      */
-    public function sumFieldsDataProvider(): array
+    public static function sumFieldsDataProvider(): array
     {
         $obj1 = new \stdClass();
         $obj1->foo = 1;
@@ -274,7 +274,7 @@ class FunctionalUnitTest extends TestCase
      *
      * @return array test data
      */
-    public function filterDataProvider(): array
+    public static function filterDataProvider(): array
     {
         $obj1 = new \stdClass();
         $obj1->foo = 1;
